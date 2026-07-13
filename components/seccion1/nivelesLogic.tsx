@@ -34,7 +34,7 @@ export type BotonNivel = {
   datos: number[]
 }
 
-const urlBuffer = "http://192.168.20.151:8500/buffer"
+const urlBuffer = "http://54.232.240.207:8500/buffer"
 
 export async function getBuffer(): Promise<NivelData> {
   const response = await fetch(urlBuffer)
