@@ -30,9 +30,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen">
         <ThemeProvider>
-          <LayoutClient>
-            {children}
-          </LayoutClient>
+          <LayoutClient>{children}</LayoutClient>
         </ThemeProvider>
       </body>
     </html>

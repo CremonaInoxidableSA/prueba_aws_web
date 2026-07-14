@@ -14,7 +14,7 @@ export async function GET() {
 
     const data = (await response.json()) as NivelData
     return NextResponse.json(data)
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "No se pudo conectar con el servidor" },
       { status: 500 }

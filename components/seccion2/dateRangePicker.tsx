@@ -1,31 +1,31 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { format, startOfWeek, endOfWeek, subWeeks } from "date-fns";
-import { CalendarIcon, Sheet } from "lucide-react";
-import { type DateRange } from "react-day-picker";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import * as React from "react"
+import { format, startOfWeek, endOfWeek, subWeeks } from "date-fns"
+import { CalendarIcon, Sheet } from "lucide-react"
+import { type DateRange } from "react-day-picker"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { toast } from "sonner";
+} from "@/components/ui/popover"
+import { toast } from "sonner"
 
 const getPreviousWeekRange = (): DateRange => {
-  const prevWeek = subWeeks(new Date(), 1);
+  const prevWeek = subWeeks(new Date(), 1)
   return {
     from: startOfWeek(prevWeek, { weekStartsOn: 0 }),
     to: endOfWeek(prevWeek, { weekStartsOn: 0 }),
-  };
-};
+  }
+}
 
 interface DateRangePickerProps {
-  value?: DateRange;
-  onChange?: (range: DateRange | undefined) => void;
-  onApply?: (range: DateRange | undefined) => void;
-  onDownloadExcel?: () => void;
+  value?: DateRange
+  onChange?: (range: DateRange | undefined) => void
+  onApply?: (range: DateRange | undefined) => void
+  onDownloadExcel?: () => void
 }
 
 const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
@@ -34,18 +34,25 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
   onApply,
 }) => {
   const [date, setDate] = React.useState<DateRange | undefined>(
-    value ?? getPreviousWeekRange(),
-  );
+    value ?? getPreviousWeekRange()
+  )
 
   const handleSelect = (range: DateRange | undefined) => {
-    setDate(range);
-    onChange?.(range);
-  };
+    setDate(range)
+    onChange?.(range)
+  }
 
-  
-  async function handleExcelFechas(date_inicio: Date | undefined, date_fin: Date | undefined) {
+  async function handleExcelFechas(
+    date_inicio: Date | undefined,
+    date_fin: Date | undefined
+  ) {
     try {
-      const res = await fetch("/api/excelReporteFechas?fecha_inicio=" + (date_inicio ? format(date_inicio, "dd-MM-yyyy") : "") + "&fecha_fin=" + (date_fin ? format(date_fin, "dd-MM-yyyy") : ""));
+      const res = await fetch(
+        "/api/excelReporteFechas?fecha_inicio=" +
+          (date_inicio ? format(date_inicio, "dd-MM-yyyy") : "") +
+          "&fecha_fin=" +
+          (date_fin ? format(date_fin, "dd-MM-yyyy") : "")
+      )
       if (!res.ok) {
         const data = await res.json().catch(() => null)
         toast.error(data?.error ?? "Error al descargar reporte")
@@ -72,7 +79,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
       URL.revokeObjectURL(url)
 
       toast.success("Reporte descargado correctamente")
-    } catch (error) {
+    } catch {
       toast.error("No se pudo conectar con el servidor")
     }
   }
@@ -120,13 +127,13 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
       </Button>
       <Button
         onClick={() => handleExcelFechas(date?.from, date?.to)}
-        className="flex w-full flex-1 gap-2 border-greencremona bg-greencremona/20 hover:bg-greencremona/40 text-greencremona items-center justify-center"
+        className="flex w-full flex-1 items-center justify-center gap-2 border-greencremona bg-greencremona/20 text-greencremona hover:bg-greencremona/40"
       >
         <Sheet className="h-4 w-4" />
         <p>DESCARGAR EXCEL</p>
       </Button>
     </div>
   )
-};
+}
 
-export default DateRangePickerComponent;
+export default DateRangePickerComponent

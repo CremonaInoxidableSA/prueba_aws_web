@@ -62,7 +62,7 @@ export default function Seccion1() {
       }
       const data = await res.json().catch(() => null)
       toast.success(data?.message ?? "Simulación enviada correctamente")
-    } catch (error) {
+    } catch {
       toast.error("No se pudo conectar con el servidor")
     }
   }
@@ -96,7 +96,7 @@ export default function Seccion1() {
       URL.revokeObjectURL(url)
 
       toast.success("Reporte descargado correctamente")
-    } catch (error) {
+    } catch {
       toast.error("No se pudo conectar con el servidor")
     }
   }

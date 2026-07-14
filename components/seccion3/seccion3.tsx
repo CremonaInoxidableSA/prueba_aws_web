@@ -30,7 +30,6 @@ interface Seccion3Props {
 }
 
 export default function Seccion3({
-  dateRange,
   graficoData,
   loading,
   error,
