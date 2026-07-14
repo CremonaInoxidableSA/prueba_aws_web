@@ -14,9 +14,6 @@ export type NivelData = {
   nivel11: number[]
   nivel12: number[]
   nivel13: number[]
-  nivel14: number[]
-  nivel15: number[]
-  nivel16: number[]
   equipoSeleccionado: string
   recetaBuffer1: string
   rackBuffer1: number
@@ -50,9 +47,6 @@ const alturasNivel: Record<number, string> = {
   11: "2.3rem",
   12: "2.3rem",
   13: "2.2rem",
-  14: "2.3rem",
-  15: "2.3rem",
-  16: "2.3rem",
 }
 
 const posicionesNivel: Record<number, string> = {
@@ -69,9 +63,6 @@ const posicionesNivel: Record<number, string> = {
   11: "29.45rem",
   12: "32.15rem",
   13: "34.75rem",
-  14: "35.5rem",
-  15: "38rem",
-  16: "40.5rem",
 }
 
 export async function getBuffer(): Promise<NivelData> {
@@ -85,7 +76,7 @@ export async function getBuffer(): Promise<NivelData> {
 }
 
 export function getNiveles(buffer: NivelData): (Nivel | undefined)[] {
-  return Array.from({ length: 16 }, (_, index) => {
+  return Array.from({ length: 13 }, (_, index) => {
     const key = `nivel${index + 1}` as keyof NivelData
     const datos = buffer[key]
     if (datos && Array.isArray(datos)) {
@@ -129,7 +120,7 @@ export function getBotonesNivel(
   buffer: NivelData | null,
   nivelesRealtime?: number[]
 ): BotonNivel[] {
-  return Array.from({ length: 16 }, (_, index) => {
+  return Array.from({ length: 13 }, (_, index) => {
     const numero = index + 1
     const estadoRealtime = nivelesRealtime?.[index]
 

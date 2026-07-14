@@ -221,18 +221,29 @@ export default function Seccion1() {
           </div>
 
           <div className="flex flex-row justify-between gap-5">
-            {([1, 2, 3] as const).map((numero) => (
-              <div
-                key={numero}
-                className={`flex aspect-square h-20 items-center justify-center rounded-full border border-white/40 text-sm font-semibold ${
-                  botonRealtime?.numeroBoton === numero
-                    ? "bg-primary text-white ring-2 ring-primary"
-                    : "bg-background4 text-foreground"
-                }`}
-              >
-                Boton {numero}
-              </div>
-            ))}
+            {([1, 2, 3] as const).map((numero) => {
+              const isActive = botonRealtime?.numeroBoton === numero
+              const estado =
+                botonRealtime?.numeroBoton === numero ? botonRealtime.estado : 0
+              const isOn = estado === 1
+
+              return (
+                <button
+                  key={numero}
+                  type="button"
+                  className={`flex aspect-square h-20 flex-col items-center justify-center rounded-full border text-sm font-semibold transition-colors ${
+                    isOn
+                      ? "border-green-500 bg-green-500/30 text-white"
+                      : "border-red-500 bg-red-500/30 text-white"
+                  } ${isActive ? "ring-2 ring-primary" : ""}`}
+                >
+                  <span>Botón {numero}</span>
+                  <span className="text-xs uppercase">
+                    {isOn ? "ON" : "OFF"}
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
