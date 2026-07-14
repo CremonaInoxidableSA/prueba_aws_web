@@ -111,16 +111,53 @@ export function getColorForNivel(nivel: number[] | undefined): string {
   return "bg-green-500/30 hover:bg-green-600/70"
 }
 
-export function getBotonesNivel(buffer: NivelData): BotonNivel[] {
-  return getNiveles(buffer)
-    .filter((nivel): nivel is Nivel => nivel !== undefined)
-    .map((nivel) => ({
-      numero: nivel.numero,
-      color: getColorForNivel(nivel.datos),
-      datos: nivel.datos,
-      altura: alturasNivel[nivel.numero] ?? "2.25rem",
-      posicionY: posicionesNivel[nivel.numero] ?? "0rem",
-    }))
+export function getColorForEstadoNivel(estado: number | undefined): string {
+  switch (estado) {
+    case 2:
+      return "bg-blue-500/30 hover:bg-blue-600/70"
+    case 3:
+      return "bg-amber-500/30 hover:bg-amber-600/70"
+    case 4:
+      return "bg-green-500/30 hover:bg-green-600/70"
+    case 1:
+    default:
+      return "bg-gray-500/30 hover:bg-gray-600/70"
+  }
+}
+
+export function getBotonesNivel(
+  buffer: NivelData | null,
+  nivelesRealtime?: number[]
+): BotonNivel[] {
+  return Array.from({ length: 16 }, (_, index) => {
+    const numero = index + 1
+    const estadoRealtime = nivelesRealtime?.[index]
+
+    if (estadoRealtime !== undefined) {
+      return {
+        numero,
+        color: getColorForEstadoNivel(estadoRealtime),
+        datos: [estadoRealtime],
+        altura: alturasNivel[numero] ?? "2.25rem",
+        posicionY: posicionesNivel[numero] ?? "0rem",
+      }
+    }
+
+    if (!buffer) return undefined
+
+    const key = `nivel${numero}` as keyof NivelData
+    const datos = buffer[key] as number[] | undefined
+
+    if (!datos || !Array.isArray(datos)) return undefined
+
+    return {
+      numero,
+      color: getColorForNivel(datos),
+      datos,
+      altura: alturasNivel[numero] ?? "2.25rem",
+      posicionY: posicionesNivel[numero] ?? "0rem",
+    }
+  }).filter((nivel): nivel is BotonNivel => nivel !== undefined)
 }
 
 export function segundosAHora(segundos: number): string {

@@ -10,32 +10,32 @@ export const dataTiempoReal: TiempoRealCardItem[] = [
   {
     id: 1,
     title: "ESTADO EQUIPO",
-    description: "ACTIVO",
+    description: "-",
   },
   {
     id: 2,
     title: "ESTADO MESA ESPERA",
-    description: "ACTIVA",
+    description: "-",
   },
   {
     id: 3,
     title: "NIVEL ACTUAL",
-    description: "1/16",
+    description: "-",
   },
   {
     id: 4,
     title: "RECETA ACTUAL",
-    description: "CORTE MEDIANO",
+    description: "-",
   },
   {
     id: 5,
     title: "RACK ACTUAL",
-    description: "51235",
+    description: "-",
   },
   {
     id: 6,
     title: "NUMERO DE NIVELES SELECCIONADOS",
-    description: "10/16",
+    description: "-",
   },
 ]
 
@@ -110,12 +110,12 @@ export function getDataTiempoReal(data: {
   recetaActual: string
 }) {
   const estadoEquipo =
-    data.estadoEquipo === 2
+    data.estadoEquipo === 1
       ? "ACTIVO"
-      : data.estadoEquipo === 1
-        ? "EN PROCESO"
+      : data.estadoEquipo === 2
+        ? "PAUSA"
         : "INACTIVO"
-  const mesaEspera = data.mesaEspera === 0 ? "INACTIVA" : "ACTIVA"
+  const mesaEspera = data.mesaEspera === 1 ? "ACTIVA" : "INACTIVA"
 
   return [
     {

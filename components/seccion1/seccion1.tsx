@@ -106,7 +106,11 @@ export default function Seccion1() {
     }
   }, [])
 
-  const botonesNivel = buffer ? getBotonesNivel(buffer) : []
+  const botonesNivelTiempoReal = getBotonesNivel(
+    buffer,
+    tiempoRealData?.niveles
+  )
+  const botonesNivelUltimoCiclo = getBotonesNivel(buffer)
 
   const nivelActual = buffer ? getNivel(buffer, nivelSeleccionado) : undefined
 
@@ -217,58 +221,36 @@ export default function Seccion1() {
           </div>
 
           <div className="flex flex-row justify-between gap-5">
-            <Button
-              className={`aspect-square h-20 rounded-full ${
-                botonRealtime?.numeroBoton === 1
-                  ? "bg-primary text-white ring-2 ring-primary"
-                  : ""
-              }`}
-            >
-              Boton 1
-            </Button>
-
-            <Button
-              className={`aspect-square h-20 rounded-full ${
-                botonRealtime?.numeroBoton === 2
-                  ? "bg-primary text-white ring-2 ring-primary"
-                  : ""
-              }`}
-            >
-              Boton 2
-            </Button>
-
-            <Button
-              className={`aspect-square h-20 rounded-full ${
-                botonRealtime?.numeroBoton === 3
-                  ? "bg-primary text-white ring-2 ring-primary"
-                  : ""
-              }`}
-            >
-              Boton 3
-            </Button>
+            {([1, 2, 3] as const).map((numero) => (
+              <div
+                key={numero}
+                className={`flex aspect-square h-20 items-center justify-center rounded-full border border-white/40 text-sm font-semibold ${
+                  botonRealtime?.numeroBoton === numero
+                    ? "bg-primary text-white ring-2 ring-primary"
+                    : "bg-background4 text-foreground"
+                }`}
+              >
+                Boton {numero}
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="relative flex w-1/2 items-center justify-center">
           <Image alt="RACK" src="/RACK.png" fill className="z-10" priority />
           <div className="flex h-full w-full flex-col items-center">
-            {botonesNivel.map((boton) => (
-              <Button
+            {botonesNivelTiempoReal.map((boton) => (
+              <div
                 key={boton.numero}
-                onClick={() => setNivelSeleccionado(boton.numero)}
                 style={{
                   position: "absolute",
                   top: boton.posicionY,
                   height: boton.altura,
                 }}
-                className={`${boton.color} z-20 w-7/8 text-white ${
-                  nivelSeleccionado === boton.numero
-                    ? "ring-2 ring-primary"
-                    : ""
-                }`}
+                className={`${boton.color} z-20 flex w-7/8 items-center justify-center rounded-md text-sm font-semibold text-white`}
               >
                 {boton.numero}
-              </Button>
+              </div>
             ))}
           </div>
         </div>
@@ -320,7 +302,7 @@ export default function Seccion1() {
           />
 
           <div className="flex h-full w-full flex-col items-center">
-            {botonesNivel.map((boton) => (
+            {botonesNivelUltimoCiclo.map((boton) => (
               <Button
                 key={boton.numero}
                 onClick={() => setNivelSeleccionado(boton.numero)}
