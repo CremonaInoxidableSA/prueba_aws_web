@@ -74,8 +74,8 @@ export default function Seccion1() {
     if (typeof window === "undefined") return
 
     let isMounted = true
-    const tiempoSocket = new WebSocket(`ws://${API_URL}/tiemporeal`)
-    const botonesSocket = new WebSocket(`ws://${API_URL}/botones`)
+    const tiempoSocket = new WebSocket(`wss://${API_URL}/tiemporeal`)
+    const botonesSocket = new WebSocket(`wss://${API_URL}/botones`)
 
     tiempoSocket.onmessage = (event) => {
       try {
