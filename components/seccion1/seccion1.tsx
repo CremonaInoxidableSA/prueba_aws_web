@@ -5,10 +5,29 @@ import { useEffect, useState } from "react"
 import { getBotonesNivel, getBuffer, getNivel, NivelData } from "./nivelesLogic"
 
 import {
-  dataTiempoReal,
+  dataTiempoReal as defaultDataTiempoReal,
   getDataNivelSeleccionado,
+  getDataTiempoReal,
   getDataUltimoCiclo,
+  type TiempoRealCardItem,
 } from "./data"
+
+type TiempoRealData = {
+  estadoEquipo: number
+  mesaEspera: number
+  nivelActual: number
+  niveles: number[]
+  nivelesSeleccionados: number
+  rackActual: number
+  recetaActual: string
+  timestamp: string
+}
+
+type BotonRealtime = {
+  estado: number
+  numeroBoton: number
+  timestamp: string
+}
 
 import { Button } from "@/components/ui/button"
 import { ItemCard } from "@/components/componentsClient"
@@ -22,6 +41,11 @@ import { toast } from "sonner"
 export default function Seccion1() {
   const [buffer, setBuffer] = useState<NivelData | null>(null)
   const [nivelSeleccionado, setNivelSeleccionado] = useState(1)
+  const [tiempoRealData, setTiempoRealData] = useState<TiempoRealData | null>(
+    null
+  )
+  const [botonRealtime, setBotonRealtime] = useState<BotonRealtime | null>(null)
+  const [wsError, setWsError] = useState<string | null>(null)
 
   useEffect(() => {
     async function cargarBuffer() {
@@ -41,9 +65,54 @@ export default function Seccion1() {
     }
     cargarBuffer()
   }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    let isMounted = true
+    const tiempoSocket = new WebSocket("ws://192.168.20.151:8500/tiemporeal")
+    const botonesSocket = new WebSocket("ws://192.168.20.151:8500/botones")
+
+    tiempoSocket.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data) as TiempoRealData
+        if (isMounted) setTiempoRealData(message)
+      } catch (error) {
+        console.error("WS tiemporeal parse error", error)
+      }
+    }
+
+    tiempoSocket.onerror = () => {
+      if (isMounted) setWsError("Error de conexión con tiemporeal")
+    }
+
+    botonesSocket.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data) as BotonRealtime
+        if (isMounted) setBotonRealtime(message)
+      } catch (error) {
+        console.error("WS botones parse error", error)
+      }
+    }
+
+    botonesSocket.onerror = () => {
+      if (isMounted) setWsError("Error de conexión con botones")
+    }
+
+    return () => {
+      isMounted = false
+      tiempoSocket.close()
+      botonesSocket.close()
+    }
+  }, [])
+
   const botonesNivel = buffer ? getBotonesNivel(buffer) : []
 
   const nivelActual = buffer ? getNivel(buffer, nivelSeleccionado) : undefined
+
+  const dataTiempoReal: TiempoRealCardItem[] = tiempoRealData
+    ? getDataTiempoReal(tiempoRealData)
+    : defaultDataTiempoReal
 
   const dataUltimoCiclo = getDataUltimoCiclo(buffer)
 
@@ -130,6 +199,11 @@ export default function Seccion1() {
           <h1>DATOS EN TIEMPO REAL</h1>
 
           <div className="flex flex-col gap-5">
+            {wsError ? (
+              <div className="rounded border border-red-500 bg-red-100 p-3 text-sm text-red-700">
+                {wsError}
+              </div>
+            ) : null}
             {dataTiempoReal.map((item) => (
               <ItemCard
                 key={item.id}
@@ -143,11 +217,35 @@ export default function Seccion1() {
           </div>
 
           <div className="flex flex-row justify-between gap-5">
-            <Button className="aspect-square h-20 rounded-full">Boton 1</Button>
+            <Button
+              className={`aspect-square h-20 rounded-full ${
+                botonRealtime?.numeroBoton === 1
+                  ? "bg-primary text-white ring-2 ring-primary"
+                  : ""
+              }`}
+            >
+              Boton 1
+            </Button>
 
-            <Button className="aspect-square h-20 rounded-full">Boton 2</Button>
+            <Button
+              className={`aspect-square h-20 rounded-full ${
+                botonRealtime?.numeroBoton === 2
+                  ? "bg-primary text-white ring-2 ring-primary"
+                  : ""
+              }`}
+            >
+              Boton 2
+            </Button>
 
-            <Button className="aspect-square h-20 rounded-full">Boton 3</Button>
+            <Button
+              className={`aspect-square h-20 rounded-full ${
+                botonRealtime?.numeroBoton === 3
+                  ? "bg-primary text-white ring-2 ring-primary"
+                  : ""
+              }`}
+            >
+              Boton 3
+            </Button>
           </div>
         </div>
 

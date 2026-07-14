@@ -1,6 +1,12 @@
 import { NivelData, segundosAHora } from "./nivelesLogic"
 
-export const dataTiempoReal = [
+export type TiempoRealCardItem = {
+  id: number
+  title: string
+  description: string
+}
+
+export const dataTiempoReal: TiempoRealCardItem[] = [
   {
     id: 1,
     title: "ESTADO EQUIPO",
@@ -91,6 +97,56 @@ export function getDataNivelSeleccionado(
       id: 4,
       title: "NUMERO DE CANCELACIONES",
       description: nivel ? nivel[0].toString() : "-",
+    },
+  ]
+}
+
+export function getDataTiempoReal(data: {
+  estadoEquipo: number
+  mesaEspera: number
+  nivelActual: number
+  nivelesSeleccionados: number
+  rackActual: number
+  recetaActual: string
+}) {
+  const estadoEquipo =
+    data.estadoEquipo === 2
+      ? "ACTIVO"
+      : data.estadoEquipo === 1
+        ? "EN PROCESO"
+        : "INACTIVO"
+  const mesaEspera = data.mesaEspera === 0 ? "INACTIVA" : "ACTIVA"
+
+  return [
+    {
+      id: 1,
+      title: "ESTADO EQUIPO",
+      description: estadoEquipo,
+    },
+    {
+      id: 2,
+      title: "ESTADO MESA ESPERA",
+      description: mesaEspera,
+    },
+    {
+      id: 3,
+      title: "NIVEL ACTUAL",
+      description: `${data.nivelActual}/16`,
+    },
+    {
+      id: 4,
+      title: "RECETA ACTUAL",
+      description: data.recetaActual || "-",
+    },
+    {
+      id: 5,
+      title: "RACK ACTUAL",
+      description: data.rackActual?.toString() ?? "-",
+    },
+    {
+      id: 6,
+      title: "NUMERO DE NIVELES SELECCIONADOS",
+      description: `${data.nivelesSeleccionados}/16`,
     },
   ]
 }
