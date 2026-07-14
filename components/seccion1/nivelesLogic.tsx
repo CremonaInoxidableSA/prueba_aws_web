@@ -118,7 +118,8 @@ export function getColorForEstadoNivel(estado: number | undefined): string {
 
 export function getBotonesNivel(
   buffer: NivelData | null,
-  nivelesRealtime?: number[]
+  nivelesRealtime?: number[],
+  useBufferFallback = true
 ): BotonNivel[] {
   return Array.from({ length: 13 }, (_, index) => {
     const numero = index + 1
@@ -129,6 +130,16 @@ export function getBotonesNivel(
         numero,
         color: getColorForEstadoNivel(estadoRealtime),
         datos: [estadoRealtime],
+        altura: alturasNivel[numero] ?? "2.25rem",
+        posicionY: posicionesNivel[numero] ?? "0rem",
+      }
+    }
+
+    if (!useBufferFallback) {
+      return {
+        numero,
+        color: "bg-gray-500/30 hover:bg-gray-600/70",
+        datos: [],
         altura: alturasNivel[numero] ?? "2.25rem",
         posicionY: posicionesNivel[numero] ?? "0rem",
       }

@@ -108,7 +108,8 @@ export default function Seccion1() {
 
   const botonesNivelTiempoReal = getBotonesNivel(
     buffer,
-    tiempoRealData?.niveles
+    tiempoRealData?.niveles,
+    false
   )
   const botonesNivelUltimoCiclo = getBotonesNivel(buffer)
 
@@ -222,26 +223,24 @@ export default function Seccion1() {
 
           <div className="flex flex-row justify-between gap-5">
             {([1, 2, 3] as const).map((numero) => {
-              const isActive = botonRealtime?.numeroBoton === numero
               const estado =
                 botonRealtime?.numeroBoton === numero ? botonRealtime.estado : 0
               const isOn = estado === 1
 
               return (
-                <button
+                <div
                   key={numero}
-                  type="button"
                   className={`flex aspect-square h-20 flex-col items-center justify-center rounded-full border text-sm font-semibold transition-colors ${
                     isOn
                       ? "border-green-500 bg-green-500/30 text-white"
                       : "border-red-500 bg-red-500/30 text-white"
-                  } ${isActive ? "ring-2 ring-primary" : ""}`}
+                  }`}
                 >
                   <span>Botón {numero}</span>
                   <span className="text-xs uppercase">
                     {isOn ? "ON" : "OFF"}
                   </span>
-                </button>
+                </div>
               )
             })}
           </div>
