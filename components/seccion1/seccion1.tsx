@@ -12,6 +12,8 @@ import {
   type TiempoRealCardItem,
 } from "./data"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "192.168.20.151:8500"
+
 type TiempoRealData = {
   estadoEquipo: number
   mesaEspera: number
@@ -70,8 +72,8 @@ export default function Seccion1() {
     if (typeof window === "undefined") return
 
     let isMounted = true
-    const tiempoSocket = new WebSocket("ws://192.168.20.151:8500/tiemporeal")
-    const botonesSocket = new WebSocket("ws://192.168.20.151:8500/botones")
+    const tiempoSocket = new WebSocket(`ws://${API_URL}/tiemporeal`)
+    const botonesSocket = new WebSocket(`ws://${API_URL}/botones`)
 
     tiempoSocket.onmessage = (event) => {
       try {

@@ -131,7 +131,7 @@ export function getDataTiempoReal(data: {
     {
       id: 3,
       title: "NIVEL ACTUAL",
-      description: `${data.nivelActual}/16`,
+      description: `${data.nivelActual}/13`,
     },
     {
       id: 4,
@@ -146,7 +146,7 @@ export function getDataTiempoReal(data: {
     {
       id: 6,
       title: "NUMERO DE NIVELES SELECCIONADOS",
-      description: `${data.nivelesSeleccionados}/16`,
+      description: `${data.nivelesSeleccionados}/13`,
     },
   ]
 }

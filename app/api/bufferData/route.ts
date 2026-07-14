@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
 import { NivelData } from "@/components/seccion1/nivelesLogic"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "192.168.20.151:8500"
+
 export async function GET() {
   try {
-    const response = await fetch("http://192.168.20.151:8500/buffer")
+    const response = await fetch(`http://${API_URL}/buffer`)
 
     if (!response.ok) {
       return NextResponse.json(

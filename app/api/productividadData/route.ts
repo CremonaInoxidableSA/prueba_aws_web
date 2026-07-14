@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "192.168.20.151:8500"
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const fecha_inicio = searchParams.get("fecha_inicio")
@@ -14,7 +16,7 @@ export async function GET(req: Request) {
 
   try {
     const response = await fetch(
-      `http://192.168.20.151:8500/productividad?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`
+      `http://${API_URL}/productividad?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}`
     )
 
     if (!response.ok) {
