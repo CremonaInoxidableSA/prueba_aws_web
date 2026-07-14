@@ -28,8 +28,10 @@ type TiempoRealData = {
 type BotonRealtime = {
   estado: number
   numeroBoton: number
-  timestamp: string
+  timestamp?: string
 }
+
+type BotonesRealtimePayload = BotonRealtime[]
 
 import { Button } from "@/components/ui/button"
 import { ItemCard } from "@/components/componentsClient"
@@ -46,7 +48,7 @@ export default function Seccion1() {
   const [tiempoRealData, setTiempoRealData] = useState<TiempoRealData | null>(
     null
   )
-  const [botonRealtime, setBotonRealtime] = useState<BotonRealtime | null>(null)
+  const [botonesRealtime, setBotonesRealtime] = useState<BotonRealtime[]>([])
   const [wsError, setWsError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -90,8 +92,12 @@ export default function Seccion1() {
 
     botonesSocket.onmessage = (event) => {
       try {
-        const message = JSON.parse(event.data) as BotonRealtime
-        if (isMounted) setBotonRealtime(message)
+        const parsed = JSON.parse(event.data)
+        const message = Array.isArray(parsed)
+          ? (parsed as BotonesRealtimePayload)
+          : ([parsed] as BotonesRealtimePayload)
+
+        if (isMounted) setBotonesRealtime(message)
       } catch (error) {
         console.error("WS botones parse error", error)
       }
@@ -225,18 +231,21 @@ export default function Seccion1() {
 
           <div className="flex flex-row justify-between gap-5">
             {([1, 2, 3] as const).map((numero) => {
-              const estado =
-                botonRealtime?.numeroBoton === numero ? botonRealtime.estado : 0
+              const boton = botonesRealtime.find(
+                (item) => item.numeroBoton === numero
+              )
+              const estado = boton?.estado ?? 0
               const isOn = estado === 1
 
               return (
                 <div
                   key={numero}
-                  className={`flex aspect-square h-20 flex-col items-center justify-center rounded-full border text-sm font-semibold transition-colors ${
-                    isOn
+                  className={`flex aspect-square h-20 flex-col items-center justify-center rounded-full border text-sm font-semibold transition-colors
+                    ${isOn
                       ? "border-green-500 bg-green-500/30 text-white"
                       : "border-red-500 bg-red-500/30 text-white"
-                  }`}
+                    }`
+                  }
                 >
                   <span>Botón {numero}</span>
                   <span className="text-xs uppercase">
