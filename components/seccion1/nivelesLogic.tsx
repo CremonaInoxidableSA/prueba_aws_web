@@ -32,9 +32,49 @@ export type BotonNivel = {
   numero: number
   color: string
   datos: number[]
+  altura: string
+  posicionY: string
 }
 
-const urlBuffer = "http://54.232.240.207:8500/buffer"
+const alturasNivel: Record<number, string> = {
+  1: "2.2rem",
+  2: "2.35rem",
+  3: "2.4rem",
+  4: "2.3rem",
+  5: "2.3rem",
+  6: "2.3rem",
+  7: "2.3rem",
+  8: "2.39rem",
+  9: "2.3rem",
+  10: "2.3rem",
+  11: "2.3rem",
+  12: "2.3rem",
+  13: "2.3rem",
+  14: "2.3rem",
+  15: "2.3rem",
+  16: "2.3rem",
+}
+
+const posicionesNivel: Record<number, string> = {
+  1: "3.2rem",
+  2: "5.67rem",
+  3: "8.3rem",
+  4: "11rem",
+  5: "13.65rem",
+  6: "16.3rem",
+  7: "18.85rem",
+  8: "21.5rem",
+  9: "24.2rem",
+  10: "26.8rem",
+  11: "29.45rem",
+  12: "32.15rem",
+  13: "34.75rem",
+  14: "35.5rem",
+  15: "38rem",
+  16: "40.5rem",
+}
+
+const urlBuffer = "http://192.168.20.151:8500/buffer"
 
 export async function getBuffer(): Promise<NivelData> {
   const response = await fetch(urlBuffer)
@@ -65,12 +105,12 @@ export function getNivel(
 }
 
 export function getColorForNivel(nivel: number[] | undefined): string {
-  if (!nivel) return "bg-gray-500/40 hover:bg-gray-600"
+  if (!nivel) return "bg-gray-500/20 hover:bg-gray-600/70"
   const finalizado = nivel[1]
   const seleccionado = nivel[2]
-  if (seleccionado === 0) return "bg-gray-500/40 hover:bg-gray-600"
-  if (finalizado === 0) return "bg-red-500/40 hover:bg-red-600"
-  return "bg-green-500/40 hover:bg-green-600"
+  if (seleccionado === 0) return "bg-gray-500/30 hover:bg-gray-600/70"
+  if (finalizado === 0) return "bg-red-500/30 hover:bg-red-600/70"
+  return "bg-green-500/30 hover:bg-green-600/70"
 }
 
 export function getBotonesNivel(buffer: NivelData): BotonNivel[] {
@@ -80,6 +120,8 @@ export function getBotonesNivel(buffer: NivelData): BotonNivel[] {
       numero: nivel.numero,
       color: getColorForNivel(nivel.datos),
       datos: nivel.datos,
+      altura: alturasNivel[nivel.numero] ?? "2.25rem",
+      posicionY: posicionesNivel[nivel.numero] ?? "0rem",
     }))
 }
 

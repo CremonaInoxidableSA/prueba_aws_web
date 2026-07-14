@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { toast } from "sonner";
 
 const getPreviousWeekRange = (): DateRange => {
   const prevWeek = subWeeks(new Date(), 1);
@@ -41,6 +42,42 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
     setDate(range);
     onChange?.(range);
   };
+
+  
+  async function handleExcelFechas(date_inicio: Date | undefined, date_fin: Date | undefined) {
+    try {
+      const res = await fetch("/api/excelReporteFechas?fecha_inicio=" + (date_inicio ? format(date_inicio, "dd-MM-yyyy") : "") + "&fecha_fin=" + (date_fin ? format(date_fin, "dd-MM-yyyy") : ""));
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        toast.error(data?.error ?? "Error al descargar reporte")
+        return
+      }
+
+      // Obtener nombre de archivo desde headers
+      const disposition = res.headers.get("content-disposition") || ""
+      let filename = "reporte.xlsx"
+      const match =
+        /filename\*=UTF-8''([^;\n]*)/.exec(disposition) ||
+        /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition)
+      if (match && match[1]) {
+        filename = decodeURIComponent(match[1].replace(/['"]+/g, ""))
+      }
+
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+
+      toast.success("Reporte descargado correctamente")
+    } catch (error) {
+      toast.error("No se pudo conectar con el servidor")
+    }
+  }
 
   return (
     <div className="flex w-[25%] flex-col justify-between gap-5 rounded bg-background2 p-5">
@@ -84,7 +121,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
         APLICAR
       </Button>
       <Button
-        onClick={() => onDownloadExcel?.()}
+        onClick={() => handleExcelFechas(date?.from, date?.to)}
         className="flex w-full flex-1 gap-2 border-greencremona bg-greencremona/50 hover:bg-greencremona/70"
       >
         <Sheet className="mr-2 h-4 w-4" />
