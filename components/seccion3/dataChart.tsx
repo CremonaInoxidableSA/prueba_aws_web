@@ -1,4 +1,10 @@
-import Data from "@/data/mock/productividad.json"
+export interface GraficoEntry {
+  id: number
+  nombre: string
+  fecha: string
+  tiempo: string
+  kilogramos: number
+}
 
 export interface ChartDataset {
   label: string
@@ -16,9 +22,8 @@ export interface ChartData {
 }
 
 const colors: Record<string, { bg: string; border: string }> = {
-  "Mortadela Corta": { bg: "rgba(255, 87, 51, 1)", border: "#FF5733" },
-  "Mortadela Mediana": { bg: "rgba(51, 255, 87, 1)", border: "#33FF57" },
-  "Mortadela Larga": { bg: "rgba(51, 87, 255, 1)", border: "#3357FF" },
+  "Mortadela corta": { bg: "rgba(255, 87, 51, 0.7)", border: "#FF5733" },
+  "Mortadela larga": { bg: "rgba(51, 87, 255, 0.7)", border: "#3357FF" },
 }
 
 const fallbackColor = (i: number) => {
@@ -29,33 +34,19 @@ const fallbackColor = (i: number) => {
   }
 }
 
-const formatDate = (d: Date) => {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, "0")
-  const day = String(d.getDate()).padStart(2, "0")
-  return `${y}-${m}-${day}`
-}
-
-export const getDataChart = (dateRange: {
-  from: Date
-  to: Date
-}): ChartData => {
-  const fromStr = formatDate(dateRange.from)
-  const toStr = formatDate(dateRange.to)
-
-  const filtered = Data.filter((e) => e.fecha >= fromStr && e.fecha <= toStr)
-
-  const labels = Array.from(new Set(filtered.map((e) => e.fecha))).sort()
-  const productos = Array.from(new Set(filtered.map((e) => e.nombre))).sort()
+export const getDataChart = (graficoData: GraficoEntry[]): ChartData => {
+  const labels = Array.from(new Set(graficoData.map((e) => e.fecha))).sort()
+  const productos = Array.from(new Set(graficoData.map((e) => e.nombre))).sort()
 
   const datasets: ChartDataset[] = productos.map((nombre, idx) => {
     const color = colors[nombre] ?? fallbackColor(idx)
 
     const totalesPorFecha: Record<string, number> = {}
-    filtered
+    graficoData
       .filter((e) => e.nombre === nombre)
       .forEach((e) => {
-        totalesPorFecha[e.fecha] = (totalesPorFecha[e.fecha] ?? 0) + e.toneladas
+        totalesPorFecha[e.fecha] =
+          (totalesPorFecha[e.fecha] ?? 0) + e.kilogramos
       })
 
     return {

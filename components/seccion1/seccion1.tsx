@@ -76,7 +76,6 @@ export default function Seccion1() {
         return
       }
 
-      // Obtener nombre de archivo desde headers
       const disposition = res.headers.get("content-disposition") || ""
       let filename = "reporte.xlsx"
       const match =

@@ -32,7 +32,6 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
   value,
   onChange,
   onApply,
-  onDownloadExcel,
 }) => {
   const [date, setDate] = React.useState<DateRange | undefined>(
     value ?? getPreviousWeekRange(),
@@ -53,7 +52,6 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
         return
       }
 
-      // Obtener nombre de archivo desde headers
       const disposition = res.headers.get("content-disposition") || ""
       let filename = "reporte.xlsx"
       const match =
@@ -122,9 +120,9 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
       </Button>
       <Button
         onClick={() => handleExcelFechas(date?.from, date?.to)}
-        className="flex w-full flex-1 gap-2 border-greencremona bg-greencremona/50 hover:bg-greencremona/70"
+        className="flex w-full flex-1 gap-2 border-greencremona bg-greencremona/20 hover:bg-greencremona/40 text-greencremona items-center justify-center"
       >
-        <Sheet className="mr-2 h-4 w-4" />
+        <Sheet className="h-4 w-4" />
         <p>DESCARGAR EXCEL</p>
       </Button>
     </div>

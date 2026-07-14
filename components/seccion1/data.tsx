@@ -65,7 +65,7 @@ export function getDataUltimoCiclo(buffer: NivelData | null) {
 
 export function getDataNivelSeleccionado(
   numeroNivel: number,
-  nivel: number[] | undefined // antes era | null
+  nivel: number[] | undefined
 ) {
   return [
     {

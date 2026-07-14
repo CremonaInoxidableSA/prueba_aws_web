@@ -49,7 +49,7 @@ const alturasNivel: Record<number, string> = {
   10: "2.3rem",
   11: "2.3rem",
   12: "2.3rem",
-  13: "2.3rem",
+  13: "2.2rem",
   14: "2.3rem",
   15: "2.3rem",
   16: "2.3rem",
@@ -74,16 +74,14 @@ const posicionesNivel: Record<number, string> = {
   16: "40.5rem",
 }
 
-const urlBuffer = "http://192.168.20.151:8500/buffer"
-
 export async function getBuffer(): Promise<NivelData> {
-  const response = await fetch(urlBuffer)
+  const response = await fetch("/api/bufferData")
 
   if (!response.ok) {
-    throw new Error("Error al obtener datos")
+    throw new Error("Error al obtener datos del buffer")
   }
 
-  return await response.json()
+  return (await response.json()) as NivelData
 }
 
 export function getNiveles(buffer: NivelData): (Nivel | undefined)[] {

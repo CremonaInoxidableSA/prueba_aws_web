@@ -15,7 +15,6 @@ export async function GET() {
         { status: response.status }
       )
     }
-    // Devuelve una respuesta JSON indicando éxito
     return NextResponse.json(
       { success: true, message: "Simulación enviada correctamente" },
       { status: 200 }

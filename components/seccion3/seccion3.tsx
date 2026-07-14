@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "chart.js"
 
-import { getDataChart } from "./dataChart"
+import { getDataChart, type GraficoEntry } from "./dataChart"
 
 Chart.register([
   BarController,
@@ -24,16 +24,24 @@ Chart.register([
 
 interface Seccion3Props {
   dateRange?: { from: Date; to: Date }
+  graficoData?: GraficoEntry[]
+  loading: boolean
+  error: string | null
 }
 
-export default function Seccion3({ dateRange }: Seccion3Props) {
+export default function Seccion3({
+  dateRange,
+  graficoData,
+  loading,
+  error,
+}: Seccion3Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartRef = useRef<Chart | null>(null)
 
   useEffect(() => {
-    if (!canvasRef.current || !dateRange) return
+    if (!canvasRef.current) return
 
-    const { labels, datasets } = getDataChart(dateRange)
+    const { labels, datasets } = getDataChart(graficoData ?? [])
 
     if (chartRef.current) {
       chartRef.current.data.labels = labels
@@ -48,9 +56,6 @@ export default function Seccion3({ dateRange }: Seccion3Props) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        // "index" + intersect:false = el tooltip muestra
-        // TODOS los productos de ese día, sin necesidad de
-        // apuntar justo a una barra específica
         interaction: {
           mode: "index",
           intersect: false,
@@ -63,14 +68,14 @@ export default function Seccion3({ dateRange }: Seccion3Props) {
           y: {
             stacked: false,
             beginAtZero: true,
-            title: { display: true, text: "Toneladas" },
+            title: { display: true, text: "Kilogramos" },
           },
         },
         plugins: {
           legend: { position: "bottom" },
           tooltip: {
             callbacks: {
-              label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue} Tn`,
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue} Kg`,
             },
           },
         },
@@ -81,16 +86,24 @@ export default function Seccion3({ dateRange }: Seccion3Props) {
       chartRef.current?.destroy()
       chartRef.current = null
     }
-  }, [dateRange])
+  }, [graficoData])
 
   return (
     <div className="flex w-full flex-col rounded bg-background2 p-5">
       <p className="mb-3 text-left text-xl font-bold">
         PRODUCCIÓN DIARIA POR PRODUCTO
       </p>
-      <div className="relative h-100 w-full">
-        <canvas ref={canvasRef} />
-      </div>
+      {error ? (
+        <p className="text-red-500">{error}</p>
+      ) : loading ? (
+        <p>Cargando datos...</p>
+      ) : graficoData && graficoData.length === 0 ? (
+        <p>No hay datos para el rango seleccionado.</p>
+      ) : (
+        <div className="relative h-100 w-full">
+          <canvas ref={canvasRef} />
+        </div>
+      )}
     </div>
   )
 }
