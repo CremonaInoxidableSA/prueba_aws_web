@@ -20,7 +20,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
