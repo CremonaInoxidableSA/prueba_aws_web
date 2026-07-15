@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
   try {
     const response = await fetch(`
-      http://${API_URL}/reporte/racks/fecha?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}
+      https://${API_URL}/reporte/racks/fecha?fecha_inicio=${fecha_inicio}&fecha_fin=${fecha_fin}
     `)
 
     if (!response.ok) {

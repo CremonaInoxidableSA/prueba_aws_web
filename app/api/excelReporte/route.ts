@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "192.168.20.151:8500"
 
 export async function GET() {
   try {
-    const response = await fetch(`http://${API_URL}/reporte/racks`, {
+    const response = await fetch(`https://${API_URL}/reporte/racks`, {
       method: "GET",
     })
 
