@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format, startOfWeek, endOfWeek, subWeeks } from "date-fns"
+import { format, startOfWeek, endOfWeek } from "date-fns"
 import { CalendarIcon, Sheet } from "lucide-react"
 import { type DateRange } from "react-day-picker"
 import { Button } from "@/components/ui/button"
@@ -14,10 +14,10 @@ import {
 import { toast } from "sonner"
 
 const getPreviousWeekRange = (): DateRange => {
-  const prevWeek = subWeeks(new Date(), 1)
+  const today = new Date()
   return {
-    from: startOfWeek(prevWeek, { weekStartsOn: 0 }),
-    to: endOfWeek(prevWeek, { weekStartsOn: 0 }),
+    from: startOfWeek(today, { weekStartsOn: 1 }),
+    to: endOfWeek(today, { weekStartsOn: 1 }),
   }
 }
 
@@ -119,6 +119,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerProps> = ({
             selected={date}
             onSelect={handleSelect}
             numberOfMonths={2}
+            weekStartsOn={1}
           />
         </PopoverContent>
       </Popover>

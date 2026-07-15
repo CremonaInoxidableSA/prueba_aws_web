@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { type DateRange } from "react-day-picker"
-import { format, startOfWeek, endOfWeek, subWeeks } from "date-fns"
+import { format, startOfWeek, endOfWeek } from "date-fns"
 
 import Seccion1 from "@/components/seccion1/seccion1"
 import SectorProductividad from "@/components/seccion2/sectorProductividad"
@@ -33,10 +33,10 @@ interface GraficoEntry {
 }
 
 const getInitialProductividadRange = (): RequiredDateRange => {
-  const prevWeek = subWeeks(new Date(), 1)
+  const today = new Date()
   return {
-    from: startOfWeek(prevWeek, { weekStartsOn: 0 }),
-    to: endOfWeek(prevWeek, { weekStartsOn: 0 }),
+    from: startOfWeek(today, { weekStartsOn: 1 }),
+    to: endOfWeek(today, { weekStartsOn: 1 }),
   }
 }
 
