@@ -9,10 +9,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-const colors: string[] = [
-  "#FF5733",
-  "#33FF57",
-  "#3357FF",
+const colorMap: Record<string, string> = {
+  "Mortadela corta": "#FF5733",
+  "Mortadela mediana": "#33FF57",
+  "Mortadela larga": "#3357FF",
+}
+
+const fallbackColors: string[] = [
   "#F333FF",
   "#FF33A6",
   "#33FFF5",
@@ -31,6 +34,10 @@ const colors: string[] = [
   "#FF33C5",
   "#33FFC5",
 ]
+
+const getColorForProducto = (recetaNombre: string, index: number): string => {
+  return colorMap[recetaNombre] ?? fallbackColors[index % fallbackColors.length]
+}
 
 interface ProductividadData {
   racks: number
@@ -69,7 +76,7 @@ const Productividad = ({
         nombre: item.receta_nombre,
         toneladas: item.cantidad_producida,
         porcentaje: item.porcentaje,
-        color: colors[idx % colors.length],
+        color: getColorForProducto(item.receta_nombre, idx),
       })) ?? []
 
     return {
