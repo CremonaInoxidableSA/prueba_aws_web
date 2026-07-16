@@ -23,7 +23,7 @@ export interface ChartData {
 
 const colors: Record<string, { bg: string; border: string }> = {
   "Mortadela corta": { bg: "rgba(255, 87, 51, 0.7)", border: "#FF5733" },
-  "Mortadela mediana": { bg: "rgba(255, 87, 51, 0.7)", border: "#33FF57" },
+  "Mortadela mediana": { bg: "rgba(51, 255, 87, 0.7)", border: "#33FF57" },
   "Mortadela larga": { bg: "rgba(51, 87, 255, 0.7)", border: "#3357FF" },
 }
 
